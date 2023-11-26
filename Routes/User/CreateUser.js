@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const User  = require('../../Model/User'); // Correct import statement
+const User  = require('../../Model/User'); 
 
 const router = express.Router();
 

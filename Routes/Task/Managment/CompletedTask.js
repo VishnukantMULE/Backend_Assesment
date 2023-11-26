@@ -1,31 +1,25 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const mongoose = require('mongoose');
-const Task = require('../../../Model/Task'); 
+const mongoose = require("mongoose");
+const Task = require("../../../Model/Task");
 
-router.get('/completedtask', async (req, res) => {
+router.get("/completedtask", async (req, res) => {
   try {
-    const { userId, pageNumber, pageSize } = req.bosy;
+    const { userId } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ error: 'Invalid user ID' });
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required." });
     }
 
-    if (!pageNumber || !pageSize) {
-      return res.status(400).json({ error: 'Page number and size are required.' });
-    }
-
-    const tasks = await Task.find({ userId, status: 'Done' })
-      .skip((pageNumber - 1) * pageSize)
-      .limit(parseInt(pageSize));
+    const tasks = await Task.find({ userId, status: "Done" });
 
     if (!tasks || tasks.length === 0) {
-      return res.status(404).json({ error: 'Tasks not found' });
+      return res.status(404).json({ error: "Tasks not found" });
     }
 
     res.json({ tasks });
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
